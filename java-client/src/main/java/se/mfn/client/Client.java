@@ -6,7 +6,6 @@ import se.mfn.client.models.NewsItem;
 import se.mfn.client.models.Type;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -143,7 +142,7 @@ public class Client {
             return b.toString();
         }
 
-        public List<NewsItem> get() throws IOException {
+        public List<NewsItem> fetch() throws IOException {
 
             InputStream is = new URL(url + value()).openStream();
 

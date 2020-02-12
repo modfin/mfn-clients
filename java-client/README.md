@@ -20,25 +20,25 @@ public class Example {
         Client client = new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
 
         // The latest item
-        List<NewsItem> items = client.feed().get();
+        List<NewsItem> items = client.feed().fetch();
         System.out.println(" 1: " + items.get(0));
 
         // Only items from 2019
-        items = client.feed().year(2019).get();
+        items = client.feed().year(2019).fetch();
         System.out.println(" 2: " + items.get(0));
 
         // Only items from 2019 that are Public relationship
         items = client.feed()
                 .year(2019)
                 .type(Type.PR)
-                .get();
+                .fetch();
         System.out.println(" 3: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship
         items = client.feed()
                 .year(2019)
                 .type(Type.IR)
-                .get();
+                .fetch();
         System.out.println(" 4: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship and has the tag sub:ca
@@ -46,7 +46,7 @@ public class Example {
                 .year(2019)
                 .type(Type.IR)
                 .hasTag("sub:ca")
-                .get();
+                .fetch();
         System.out.println(" 5: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship and has the tag sub:ca in English
@@ -55,7 +55,7 @@ public class Example {
                 .type(Type.IR)
                 .hasTag("sub:ca")
                 .lang("en")
-                .get();
+                .fetch();
         System.out.println(" 6: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship and has the tag sub:ca in English
@@ -66,7 +66,7 @@ public class Example {
                 .hasTag("sub:ca")
                 .lang("en")
                 .query("financial technology")
-                .get();
+                .fetch();
         System.out.println(" 7: " + items.get(0));
 
         // Get specific item

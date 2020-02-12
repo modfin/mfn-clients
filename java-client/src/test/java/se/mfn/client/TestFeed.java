@@ -22,7 +22,7 @@ public class TestFeed {
     @Test
     public void testFeedItems() throws IOException {
         Client c = createClient();
-        List<NewsItem> items = c.feed().get();
+        List<NewsItem> items = c.feed().fetch();
         assertTrue(items.size() >= 10);
     }
 
@@ -30,7 +30,7 @@ public class TestFeed {
     public void testSingleItem() throws IOException {
 
         Client c = createClient();
-        List<NewsItem> items = c.feed().get();
+        List<NewsItem> items = c.feed().fetch();
         assertTrue(items.size() > 0);
 
         NewsItem item0 = items.get(0);
@@ -43,7 +43,7 @@ public class TestFeed {
     @Test
     public void testFilterEmpty() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.feed().get();
+        List<NewsItem> items0 = c.feed().fetch();
         assertTrue(0 < items0.size());
     }
 
@@ -52,7 +52,7 @@ public class TestFeed {
         Client c = createClient();
         List<NewsItem> items = c.feed()
                 .limit(5)
-                .get();
+                .fetch();
         assertEquals(5, items.size());
     }
 
@@ -62,13 +62,13 @@ public class TestFeed {
         List<NewsItem> items0 = c.feed()
                 .limit(5)
                 .offset(0)
-                .get();
+                .fetch();
         assertEquals(5, items0.size());
 
         List<NewsItem> items1 = c.feed()
                 .limit(5)
                 .offset(4)
-                .get();
+                .fetch();
         assertEquals(5, items1.size());
 
         NewsItem i1l = items0.get(4);
@@ -83,7 +83,7 @@ public class TestFeed {
         Client c = createClient();
         List<NewsItem> items0 = c.feed()
                 .type(Type.PR)
-                .get();
+                .fetch();
         assertTrue(items0.size() > 0);
 
 
@@ -99,7 +99,7 @@ public class TestFeed {
         Client c = createClient();
         List<NewsItem> items0 = c.feed()
                 .type(Type.PR)
-                .get();
+                .fetch();
         assertTrue(items0.size() > 0);
 
         NewsItem item0 = items0.get(0);
@@ -115,7 +115,7 @@ public class TestFeed {
         List<NewsItem> items0 = c.feed()
                 .type(Type.PR)
                 .year(2019)
-                .get();
+                .fetch();
         assertEquals(10, items0.size());
 
         NewsItem item0 = items0.get(0);
@@ -129,7 +129,7 @@ public class TestFeed {
         Client c = createClient();
         List<NewsItem> items0 = c.feed()
                 .year(2018)
-                .get();
+                .fetch();
 
         assertEquals(0, items0.size());
     }
@@ -141,13 +141,13 @@ public class TestFeed {
                 .year(2019)
                 .type(Type.IR)
                 .lang("sv")
-                .get();
+                .fetch();
 
         assertEquals(5, items0.size());
         items0 = c.feed()
                 .year(2019)
                 .lang("en")
-                .get();
+                .fetch();
         assertEquals(10, items0.size());
     }
 
@@ -157,7 +157,7 @@ public class TestFeed {
         List<NewsItem> items0 = c.feed()
                 .year(2019)
                 .hasTag("sub:ci")
-                .get();
+                .fetch();
 
         assertEquals(7, items0.size());
         for (NewsItem item : items0) {
@@ -168,7 +168,7 @@ public class TestFeed {
                 .year(2019)
                 .hasTag("sub:ca")
                 .hasTag(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e")
-                .get();
+                .fetch();
 
         assertEquals(1, items0.size());
         for (NewsItem item : items0) {
@@ -184,7 +184,7 @@ public class TestFeed {
         List<NewsItem> items0 = c.feed()
                 .year(2019)
                 .query("correction Lorem ipsum")
-                .get();
+                .fetch();
 
         assertEquals(1, items0.size());
         assertEquals("Correction: Test release (2) from MFN", items0.get(0).getContent().getTitle());
