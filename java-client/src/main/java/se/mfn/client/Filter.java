@@ -89,7 +89,7 @@ public class Filter {
         return b.toString();
     }
 
-    public static Filter New(){
+    public static Filter create(){
         return new Filter();
     }
 }
