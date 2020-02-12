@@ -1,10 +1,11 @@
 
 
+# Client API
+The api utilizes a builder pattern for ease of use and tries make what is expected to return.
 
 # Example of use
 ```java 
-import se.mfn.client.Client;
-import se.mfn.client.Filter;
+package se.mfn.client;
 
 import se.mfn.client.models.NewsItem;
 import se.mfn.client.models.Type;
@@ -19,53 +20,57 @@ public class Example {
         Client client = new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
 
         // The latest item
-        List<NewsItem> items = client.getFeed();
+        List<NewsItem> items = client.feed().get();
         System.out.println(" 1: " + items.get(0));
 
         // Only items from 2019
-        items = client.getFeed(Filter.create()
-                .year(2019));
+        items = client.feed().year(2019).get();
         System.out.println(" 2: " + items.get(0));
 
         // Only items from 2019 that are Public relationship
-        items = client.getFeed(Filter.create()
+        items = client.feed()
                 .year(2019)
-                .type(Type.PR));
+                .type(Type.PR)
+                .get();
         System.out.println(" 3: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship
-        items = client.getFeed(Filter.create()
+        items = client.feed()
                 .year(2019)
-                .type(Type.IR));
+                .type(Type.IR)
+                .get();
         System.out.println(" 4: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship and has the tag sub:ca
-        items = client.getFeed(Filter.create()
-                .year(2019)
-                .type(Type.IR)
-                .hasTag("sub:ca"));
-        System.out.println(" 5: " + items.get(0));
-
-        // Only items from 2019 that are Investor relationship and has the tag sub:ca in English
-        items = client.getFeed(Filter.create()
+        items = client.feed()
                 .year(2019)
                 .type(Type.IR)
                 .hasTag("sub:ca")
-                .lang("en"));
-        System.out.println(" 6: " + items.get(0));
+                .get();
+        System.out.println(" 5: " + items.get(0));
 
         // Only items from 2019 that are Investor relationship and has the tag sub:ca in English
-        // containg the text "financial technology"
-        items = client.getFeed(Filter.create()
+        items = client.feed()
                 .year(2019)
                 .type(Type.IR)
                 .hasTag("sub:ca")
                 .lang("en")
-                .query("financial technology"));
+                .get();
+        System.out.println(" 6: " + items.get(0));
+
+        // Only items from 2019 that are Investor relationship and has the tag sub:ca in English
+        // containg the text "financial technology"
+        items = client.feed()
+                .year(2019)
+                .type(Type.IR)
+                .hasTag("sub:ca")
+                .lang("en")
+                .query("financial technology")
+                .get();
         System.out.println(" 7: " + items.get(0));
 
         // Get specific item
-        NewsItem item = client.getNewsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+        NewsItem item = client.newsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
         System.out.println(" 8: " + item);
     }
 }

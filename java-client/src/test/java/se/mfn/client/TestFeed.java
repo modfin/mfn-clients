@@ -22,7 +22,7 @@ public class TestFeed {
     @Test
     public void testFeedItems() throws IOException {
         Client c = createClient();
-        List<NewsItem> items = c.getFeed();
+        List<NewsItem> items = c.feed().get();
         assertTrue(items.size() >= 10);
     }
 
@@ -30,12 +30,12 @@ public class TestFeed {
     public void testSingleItem() throws IOException {
 
         Client c = createClient();
-        List<NewsItem> items = c.getFeed();
+        List<NewsItem> items = c.feed().get();
         assertTrue(items.size() > 0);
 
         NewsItem item0 = items.get(0);
-        NewsItem item1 = c.getNewsItem(item0);
-        NewsItem item2 = c.getNewsItem(item0.getNewsId());
+        NewsItem item1 = c.newsItem(item0);
+        NewsItem item2 = c.newsItem(item0.getNewsId());
 
         assertTrue(item0.equals(item1) && item1.equals(item2));
     }
@@ -43,24 +43,32 @@ public class TestFeed {
     @Test
     public void testFilterEmpty() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create());
+        List<NewsItem> items0 = c.feed().get();
         assertTrue(0 < items0.size());
     }
 
     @Test
     public void testFilterLimit() throws IOException {
         Client c = createClient();
-        List<NewsItem> items = c.getFeed(Filter.create().limit(5));
+        List<NewsItem> items = c.feed()
+                .limit(5)
+                .get();
         assertEquals(5, items.size());
     }
 
     @Test
     public void testFilterOffset() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().limit(5).offset(0));
+        List<NewsItem> items0 = c.feed()
+                .limit(5)
+                .offset(0)
+                .get();
         assertEquals(5, items0.size());
 
-        List<NewsItem> items1 = c.getFeed(Filter.create().limit(5).offset(4));
+        List<NewsItem> items1 = c.feed()
+                .limit(5)
+                .offset(4)
+                .get();
         assertEquals(5, items1.size());
 
         NewsItem i1l = items0.get(4);
@@ -73,7 +81,9 @@ public class TestFeed {
     @Test
     public void testFilterPR() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().type(Type.PR));
+        List<NewsItem> items0 = c.feed()
+                .type(Type.PR)
+                .get();
         assertTrue(items0.size() > 0);
 
 
@@ -87,12 +97,14 @@ public class TestFeed {
     @Test
     public void testFilterPRFetch() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().type(Type.PR));
+        List<NewsItem> items0 = c.feed()
+                .type(Type.PR)
+                .get();
         assertTrue(items0.size() > 0);
 
         NewsItem item0 = items0.get(0);
 
-        NewsItem item1 = c.getNewsItem(item0);
+        NewsItem item1 = c.newsItem(item0);
 
         assertEquals(item0, item1);
     }
@@ -100,11 +112,14 @@ public class TestFeed {
     @Test
     public void testFilterYear() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().type(Type.PR).year(2019));
+        List<NewsItem> items0 = c.feed()
+                .type(Type.PR)
+                .year(2019)
+                .get();
         assertEquals(10, items0.size());
 
         NewsItem item0 = items0.get(0);
-        NewsItem item1 = c.getNewsItem(item0);
+        NewsItem item1 = c.newsItem(item0);
 
         assertEquals(item0, item1);
     }
@@ -112,7 +127,9 @@ public class TestFeed {
     @Test
     public void testFilterYear2() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().year(2018));
+        List<NewsItem> items0 = c.feed()
+                .year(2018)
+                .get();
 
         assertEquals(0, items0.size());
     }
@@ -120,24 +137,38 @@ public class TestFeed {
     @Test
     public void testFilterLang() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().year(2019).type(Type.IR).lang("sv"));
+        List<NewsItem> items0 = c.feed()
+                .year(2019)
+                .type(Type.IR)
+                .lang("sv")
+                .get();
 
         assertEquals(5, items0.size());
-        items0 = c.getFeed(Filter.create().year(2019).lang("en"));
+        items0 = c.feed()
+                .year(2019)
+                .lang("en")
+                .get();
         assertEquals(10, items0.size());
     }
 
     @Test
     public void testFilterTags() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().year(2019).hasTag("sub:ci"));
+        List<NewsItem> items0 = c.feed()
+                .year(2019)
+                .hasTag("sub:ci")
+                .get();
 
         assertEquals(7, items0.size());
         for (NewsItem item : items0) {
             assertTrue(item.getProperties().getTags().contains("sub:ci"));
         }
 
-        items0 = c.getFeed(Filter.create().year(2019).hasTag("sub:ca").hasTag(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e"));
+        items0 = c.feed()
+                .year(2019)
+                .hasTag("sub:ca")
+                .hasTag(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e")
+                .get();
 
         assertEquals(1, items0.size());
         for (NewsItem item : items0) {
@@ -150,7 +181,10 @@ public class TestFeed {
     @Test
     public void testFilterQuery() throws IOException {
         Client c = createClient();
-        List<NewsItem> items0 = c.getFeed(Filter.create().year(2019).query("correction Lorem ipsum"));
+        List<NewsItem> items0 = c.feed()
+                .year(2019)
+                .query("correction Lorem ipsum")
+                .get();
 
         assertEquals(1, items0.size());
         assertEquals("Correction: Test release (2) from MFN", items0.get(0).getContent().getTitle());
@@ -160,7 +194,7 @@ public class TestFeed {
     @Test
     public void testConent() throws IOException, ParseException {
         Client c = createClient();
-        NewsItem item = c.getNewsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+        NewsItem item = c.newsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
 
         assertEquals("b660f6cc-5d7e-4cab-8862-3271b649a636", item.getGroupId());
         assertEquals("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", item.getUrl());
