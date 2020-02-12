@@ -1,4 +1,10 @@
 .idea
-java-client/.idea
+*.iml
 java-client/target
 java-client/*.iml
+
+
+dotNet-client/*/[Bb]in/
+dotNet-client/*/[Oo]bj/
+dotNet-client/*/[Rr]elease/
+dotNet-client/*/[Dd]ebug/

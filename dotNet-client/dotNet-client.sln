@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFNClient", "MFNClient\MFNClient.csproj", "{46F6C41B-9F58-4BFA-A1F0-9F7AC12AD4D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMFNClient", "TestMFNClient\TestMFNClient.csproj", "{0F2A9951-7E61-4B3C-8CF9-019A03573FCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46F6C41B-9F58-4BFA-A1F0-9F7AC12AD4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F6C41B-9F58-4BFA-A1F0-9F7AC12AD4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F6C41B-9F58-4BFA-A1F0-9F7AC12AD4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F6C41B-9F58-4BFA-A1F0-9F7AC12AD4D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F2A9951-7E61-4B3C-8CF9-019A03573FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2A9951-7E61-4B3C-8CF9-019A03573FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2A9951-7E61-4B3C-8CF9-019A03573FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2A9951-7E61-4B3C-8CF9-019A03573FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
