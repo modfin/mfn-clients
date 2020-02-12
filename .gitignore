@@ -1,0 +1,4 @@
+.idea
+java-client/.idea
+java-client/target
+java-client/*.iml
