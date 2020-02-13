@@ -10,3 +10,7 @@ dotNet-client/*/[Rr]elease/
 dotNet-client/*/[Dd]ebug/
 
 js-client/node_modules
+js-client/package-lock.json
+
+php-client/vendor
+php-client/composer.lock
