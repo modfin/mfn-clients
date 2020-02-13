@@ -31,11 +31,36 @@ public class Client {
     }
 
 
-    public NewsItem newsItem(NewsItem item) throws IOException {
-        return newsItem(item.getNewsId());
+
+    public NewsItem newsItem(String newsSlug) throws IOException {
+        // Todo check that newsId is a uuid
+
+        StringBuilder url = new StringBuilder(this.baseUrl);
+        url.append("/all/a.json").append("?type=all");
+        url.append("&.author.entity_id=").append(entityId);
+        url.append("&news_slug=").append(newsSlug);
+
+        InputStream is = new URL(url.toString()).openStream();
+
+        try {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            Gson gson = new Gson();
+            Feed feed = gson.fromJson(rd, Feed.class);
+            if (feed.getItems() == null || feed.getItems().size() != 1) {
+                return null;
+            }
+
+            return feed.getItems().get(0);
+        } finally {
+            is.close();
+        }
     }
 
-    public NewsItem newsItem(String newsId) throws IOException {
+    public NewsItem newsItemById(NewsItem item) throws IOException {
+        return newsItemById(item.getNewsId());
+    }
+
+    public NewsItem newsItemById(String newsId) throws IOException {
         // Todo check that newsId is a uuid
 
         StringBuilder url = new StringBuilder(this.baseUrl);
@@ -58,6 +83,7 @@ public class Client {
             is.close();
         }
     }
+
 
 
     public static class Filter {

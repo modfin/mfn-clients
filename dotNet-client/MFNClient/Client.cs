@@ -31,45 +31,57 @@ namespace MFNClient
         }
 
 
-        private string NewsItemUrl(string newsId)
+        public NewsItem NewsItem(NewsItem item)
+        {
+            return NewsItemById(item.NewsId);
+        }
+        
+        public NewsItem NewsItem(string newsSlug)
+        {
+            return NewsItemAsync(newsSlug).Result;
+        }
+        public async Task<NewsItem> NewsItemAsync(string newsSlug)
+        {
+            StringBuilder url = new StringBuilder();
+            url.Append(this._baseUrl);
+            url.Append("/all/a.json").Append("?type=all");
+            url.Append("&.author.entity_id=").Append(_entityId);
+            url.Append("&news_slug=").Append(newsSlug);
+            
+            var json = await Http.Async(url.ToString());
+            var items = models.Feed.FromJson(json).Items;
+            return items?[0];
+        }
+
+        public NewsItem NewsItemById(Guid newsId)
+        {
+            return NewsItemById(newsId.ToString());
+        }
+
+        public NewsItem NewsItemById(string newsId)
+        {
+            return NewsItemByIdAsync(newsId).Result;
+        }
+
+        public async Task<NewsItem> NewsItemAsync(NewsItem item)
+        {
+            return await NewsItemByIdAsync(item.NewsId);
+        }
+
+        public async Task<NewsItem> NewsItemByIdAsync(Guid newsId)
+        {
+            return await NewsItemByIdAsync(newsId.ToString());
+        }
+
+        public async Task<NewsItem> NewsItemByIdAsync(string newsId)
         {
             StringBuilder url = new StringBuilder();
             url.Append(this._baseUrl);
             url.Append("/all/a.json").Append("?type=all");
             url.Append("&.author.entity_id=").Append(_entityId);
             url.Append("&news_id=").Append(newsId);
-            return url.ToString();
-        }
-
-        public NewsItem NewsItem(NewsItem item)
-        {
-            return NewsItem(item.NewsId);
-        }
-
-        public NewsItem NewsItem(Guid newsId)
-        {
-            return NewsItem(newsId.ToString());
-        }
-
-        public NewsItem NewsItem(string newsId)
-        {
-            var items = models.Feed.FromJson(Http.Sync(NewsItemUrl(newsId))).Items;
-            return items?[0];
-        }
-
-        public async Task<NewsItem> NewsItemAsync(NewsItem item)
-        {
-            return await NewsItemAsync(item.NewsId);
-        }
-
-        public async Task<NewsItem> NewsItemAsync(Guid newsId)
-        {
-            return await NewsItemAsync(newsId.ToString());
-        }
-
-        public async Task<NewsItem> NewsItemAsync(string newsId)
-        {
-            var json = await Http.Async(NewsItemUrl(newsId));
+            
+            var json = await Http.Async(url.ToString());
             var items = models.Feed.FromJson(json).Items;
             return items?[0];
         }

@@ -27,17 +27,41 @@ public class TestFeed {
     }
 
     @Test
-    public void testSingleItem() throws IOException {
+    public void testSingleItemIR() throws IOException {
 
         Client c = createClient();
-        List<NewsItem> items = c.feed().fetch();
+        List<NewsItem> items = c.feed().type(Type.IR).fetch();
         assertTrue(items.size() > 0);
 
         NewsItem item0 = items.get(0);
-        NewsItem item1 = c.newsItem(item0);
-        NewsItem item2 = c.newsItem(item0.getNewsId());
+        assertEquals(item0.getProperties().getType(), Type.IR);
 
-        assertTrue(item0.equals(item1) && item1.equals(item2));
+        NewsItem item1 = c.newsItemById(item0);
+        NewsItem item2 = c.newsItemById(item0.getNewsId());
+        NewsItem item3 = c.newsItem(item0.getContent().getSlug());
+
+        assertEquals(item0, item1);
+        assertEquals(item0, item2);
+        assertEquals(item0, item3);
+    }
+
+    @Test
+    public void testSingleItemPR() throws IOException {
+
+        Client c = createClient();
+        List<NewsItem> items = c.feed().type(Type.PR).fetch();
+        assertTrue(items.size() > 0);
+
+        NewsItem item0 = items.get(0);
+        assertEquals(item0.getProperties().getType(), Type.PR);
+
+        NewsItem item1 = c.newsItemById(item0);
+        NewsItem item2 = c.newsItemById(item0.getNewsId());
+        NewsItem item3 = c.newsItem(item0.getContent().getSlug());
+        assertEquals(item0, item1);
+        assertEquals(item0, item2);
+        assertEquals(item0, item3);
+
     }
 
     @Test
@@ -104,7 +128,7 @@ public class TestFeed {
 
         NewsItem item0 = items0.get(0);
 
-        NewsItem item1 = c.newsItem(item0);
+        NewsItem item1 = c.newsItemById(item0);
 
         assertEquals(item0, item1);
     }
@@ -119,7 +143,7 @@ public class TestFeed {
         assertEquals(10, items0.size());
 
         NewsItem item0 = items0.get(0);
-        NewsItem item1 = c.newsItem(item0);
+        NewsItem item1 = c.newsItemById(item0);
 
         assertEquals(item0, item1);
     }
@@ -194,7 +218,7 @@ public class TestFeed {
     @Test
     public void testConent() throws IOException, ParseException {
         Client c = createClient();
-        NewsItem item = c.newsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+        NewsItem item = c.newsItemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
 
         assertEquals("b660f6cc-5d7e-4cab-8862-3271b649a636", item.getGroupId());
         assertEquals("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", item.getUrl());

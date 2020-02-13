@@ -37,6 +37,48 @@ namespace TestMFNClient
         }
         
         [Test]
+        public void TestNewsItemIR()
+        {
+            Client c = NewClient();
+            NewsItem[] n = c.Feed().Type(Enums.TypeIr).Fetch();
+            Assert.True(n.Length > 0);
+
+            var item0 = n.First();
+            Assert.AreEqual(item0.Properties.Type, Enums.TypeIr);
+
+            var item1 = c.NewsItemById(item0.NewsId);
+            var item2 = c.NewsItemById(item0.NewsId.ToString());
+            var item3 = c.NewsItem(item0);
+            var item4 = c.NewsItem(item0.Content.Slug);
+            
+            Assert.AreEqual(item0, item1);
+            Assert.AreEqual(item0, item2);
+            Assert.AreEqual(item0, item3);
+            Assert.AreEqual(item0, item4);
+            
+        }
+        [Test]
+        public void TestNewsItemPR()
+        {
+            Client c = NewClient();
+            NewsItem[] n = c.Feed().Type(Enums.TypePr).Fetch();
+            Assert.True(n.Length > 0);
+
+            var item0 = n.First();
+            Assert.AreEqual(item0.Properties.Type, Enums.TypePr);
+            var item1 = c.NewsItemById(item0.NewsId);
+            var item2 = c.NewsItemById(item0.NewsId.ToString());
+            var item3 = c.NewsItem(item0);
+            var item4 = c.NewsItem(item0.Content.Slug);
+            
+            Assert.AreEqual(item0, item1);
+            Assert.AreEqual(item0, item2);
+            Assert.AreEqual(item0, item3);
+            Assert.AreEqual(item0, item4);
+            
+        }
+        
+        [Test]
         public void TestFeedLimit()
         {
             Client c = NewClient();
@@ -68,7 +110,7 @@ namespace TestMFNClient
             }
 
             var n0 = items.First();
-            var n1 = c.NewsItem(n0.NewsId.ToString());
+            var n1 = c.NewsItemById(n0.NewsId.ToString());
             Assert.AreEqual(n0, n1);
 
         }
@@ -153,7 +195,7 @@ namespace TestMFNClient
         public void TestFeedContent()
         {
             Client c = NewClient();
-            var item = c.NewsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+            var item = c.NewsItemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
             Assert.AreEqual("b660f6cc-5d7e-4cab-8862-3271b649a636", item.GroupId.ToString());
             Assert.AreEqual("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", item.Url.ToString());
             Assert.AreEqual("2c07a2db-2f22-4a67-ab46-ccb464296638", item.Author.EntityId.ToString());

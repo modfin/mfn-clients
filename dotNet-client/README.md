@@ -4,7 +4,6 @@ The api utilizes a builder pattern for ease of use and tries make what is expect
 
 # Example of use
 ```csharp
-
 using System;
 using System.Linq;
 using MFNClient;
@@ -71,11 +70,15 @@ namespace MFNClientExample
                 .Fetch();
             Console.WriteLine(" 7: " + items.First());
 
-            // Get specific item
-            NewsItem item = client.NewsItem("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+            // Get specific item by id
+            var item = client.NewsItemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
             Console.WriteLine(" 8: " + item);
+            
+            // Get specific item by slug
+            item = client.NewsItem("modular-finance-lanserar-nytt-irm-i-monitor");
+            Console.WriteLine(" 9: " + item);
 
         }
     }
-} 
+}
 ```
