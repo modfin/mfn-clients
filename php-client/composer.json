@@ -1,0 +1,19 @@
+{
+    "name": "modfin/mfn-client",
+    "type": "composer-plugin",
+    "description": "A lib for mfn",
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "7.2"
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "phpunit mfn-client-test"
+    },
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*"
+    }
+}
