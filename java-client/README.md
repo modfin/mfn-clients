@@ -3,6 +3,11 @@
 # Client API
 The api utilizes a builder pattern for ease of use and tries make what is expected to return.
 
+# Test
+```bash 
+mvn test
+```
+
 # Example of use
 ```java 
 package se.mfn.client;

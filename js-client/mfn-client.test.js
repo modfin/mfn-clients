@@ -83,20 +83,6 @@ suite.test('testOffset', async t => {
     return true
 });
 
-suite.test('testOffset', async t => {
-
-    const c = newClient();
-    const p0 = await c.feed().type(c.TYPE_PR).limit(5).offset(0).fetch();
-    const p1 = await c.feed().type(c.TYPE_PR).limit(5).offset(4).fetch();
-    t.true(p0.length === 5);
-    t.true(p1.length === 5);
-    p0.forEach(i => t.true(i.properties.type === c.TYPE_PR));
-    p1.forEach(i => t.true(i.properties.type === c.TYPE_PR));
-
-    t.deepEqual(p0[4], p1[0]);
-
-    return true
-});
 
 suite.test('testYear', async t => {
 

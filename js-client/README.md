@@ -1,6 +1,12 @@
 # Client API
 The api utilizes a builder pattern for ease of use and tries make what is expected to return.
 
+# Test
+```bash 
+npm install
+node mfn-client.test.js
+```
+
 # Example of use
 ```js 
 
