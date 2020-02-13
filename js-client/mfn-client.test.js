@@ -2,7 +2,6 @@
 const Suite = require('node-test');
 const MFN = require('./mfn-client.js');
 
-
 const newClient = () => MFN.create("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
 
 const suite = new Suite('MFN Client');
