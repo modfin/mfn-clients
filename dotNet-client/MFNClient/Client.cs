@@ -31,16 +31,16 @@ namespace MFNClient
         }
 
 
-        public NewsItem NewsItem(NewsItem item)
+        public NewsItem Item(NewsItem item)
         {
-            return NewsItemById(item.NewsId);
+            return ItemById(item.NewsId);
         }
         
-        public NewsItem NewsItem(string newsSlug)
+        public NewsItem Item(string newsSlug)
         {
-            return NewsItemAsync(newsSlug).Result;
+            return ItemAsync(newsSlug).Result;
         }
-        public async Task<NewsItem> NewsItemAsync(string newsSlug)
+        public async Task<NewsItem> ItemAsync(string newsSlug)
         {
             StringBuilder url = new StringBuilder();
             url.Append(this._baseUrl);
@@ -53,27 +53,27 @@ namespace MFNClient
             return items?[0];
         }
 
-        public NewsItem NewsItemById(Guid newsId)
+        public NewsItem ItemById(Guid newsId)
         {
-            return NewsItemById(newsId.ToString());
+            return ItemById(newsId.ToString());
         }
 
-        public NewsItem NewsItemById(string newsId)
+        public NewsItem ItemById(string newsId)
         {
-            return NewsItemByIdAsync(newsId).Result;
+            return ItemByIdAsync(newsId).Result;
         }
 
-        public async Task<NewsItem> NewsItemAsync(NewsItem item)
+        public async Task<NewsItem> ItemAsync(NewsItem item)
         {
-            return await NewsItemByIdAsync(item.NewsId);
+            return await ItemByIdAsync(item.NewsId);
         }
 
-        public async Task<NewsItem> NewsItemByIdAsync(Guid newsId)
+        public async Task<NewsItem> ItemByIdAsync(Guid newsId)
         {
-            return await NewsItemByIdAsync(newsId.ToString());
+            return await ItemByIdAsync(newsId.ToString());
         }
 
-        public async Task<NewsItem> NewsItemByIdAsync(string newsId)
+        public async Task<NewsItem> ItemByIdAsync(string newsId)
         {
             StringBuilder url = new StringBuilder();
             url.Append(this._baseUrl);

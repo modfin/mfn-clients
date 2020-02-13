@@ -8,3 +8,5 @@ dotNet-client/*/[Bb]in/
 dotNet-client/*/[Oo]bj/
 dotNet-client/*/[Rr]elease/
 dotNet-client/*/[Dd]ebug/
+
+js-client/node_modules

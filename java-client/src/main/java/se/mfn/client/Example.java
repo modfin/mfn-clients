@@ -63,11 +63,11 @@ public class Example {
         System.out.println(" 7: " + items.get(0));
 
         // Get specific item by id
-        NewsItem item = client.newsItemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+        NewsItem item = client.itemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
         System.out.println(" 8: " + item);
 
         // Get specific item by url slug
-        item = client.newsItem("modular-finance-launches-a-new-irm-in-monitor");
+        item = client.item("modular-finance-launches-a-new-irm-in-monitor");
         System.out.println(" 9: " + item);
     }
 }

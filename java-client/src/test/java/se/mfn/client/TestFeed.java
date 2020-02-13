@@ -36,13 +36,12 @@ public class TestFeed {
         NewsItem item0 = items.get(0);
         assertEquals(item0.getProperties().getType(), Type.IR);
 
-        NewsItem item1 = c.newsItemById(item0);
-        NewsItem item2 = c.newsItemById(item0.getNewsId());
-        NewsItem item3 = c.newsItem(item0.getContent().getSlug());
+        NewsItem item1 = c.itemById(item0);
+        NewsItem item2 = c.itemById(item0.getNewsId());
+        NewsItem item3 = c.item(item0.getContent().getSlug());
 
-        assertEquals(item0, item1);
-        assertEquals(item0, item2);
-        assertEquals(item0, item3);
+
+        assertTrue(item0.equals(item1) && item1.equals(item2) && item2.equals(item3));
     }
 
     @Test
@@ -55,9 +54,9 @@ public class TestFeed {
         NewsItem item0 = items.get(0);
         assertEquals(item0.getProperties().getType(), Type.PR);
 
-        NewsItem item1 = c.newsItemById(item0);
-        NewsItem item2 = c.newsItemById(item0.getNewsId());
-        NewsItem item3 = c.newsItem(item0.getContent().getSlug());
+        NewsItem item1 = c.itemById(item0);
+        NewsItem item2 = c.itemById(item0.getNewsId());
+        NewsItem item3 = c.item(item0.getContent().getSlug());
         assertEquals(item0, item1);
         assertEquals(item0, item2);
         assertEquals(item0, item3);
@@ -128,7 +127,7 @@ public class TestFeed {
 
         NewsItem item0 = items0.get(0);
 
-        NewsItem item1 = c.newsItemById(item0);
+        NewsItem item1 = c.itemById(item0);
 
         assertEquals(item0, item1);
     }
@@ -143,7 +142,7 @@ public class TestFeed {
         assertEquals(10, items0.size());
 
         NewsItem item0 = items0.get(0);
-        NewsItem item1 = c.newsItemById(item0);
+        NewsItem item1 = c.itemById(item0);
 
         assertEquals(item0, item1);
     }
@@ -168,10 +167,17 @@ public class TestFeed {
                 .fetch();
 
         assertEquals(5, items0.size());
+        for (NewsItem item: items0) {
+            assertEquals(item.getProperties().getLang(), "sv");
+        }
+
         items0 = c.feed()
                 .year(2019)
                 .lang("en")
                 .fetch();
+        for (NewsItem item: items0) {
+            assertEquals(item.getProperties().getLang(), "en");
+        }
         assertEquals(10, items0.size());
     }
 
@@ -218,7 +224,7 @@ public class TestFeed {
     @Test
     public void testConent() throws IOException, ParseException {
         Client c = createClient();
-        NewsItem item = c.newsItemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
+        NewsItem item = c.itemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
 
         assertEquals("b660f6cc-5d7e-4cab-8862-3271b649a636", item.getGroupId());
         assertEquals("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", item.getUrl());

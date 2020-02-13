@@ -32,7 +32,7 @@ public class Client {
 
 
 
-    public NewsItem newsItem(String newsSlug) throws IOException {
+    public NewsItem item(String newsSlug) throws IOException {
         // Todo check that newsId is a uuid
 
         StringBuilder url = new StringBuilder(this.baseUrl);
@@ -56,11 +56,11 @@ public class Client {
         }
     }
 
-    public NewsItem newsItemById(NewsItem item) throws IOException {
-        return newsItemById(item.getNewsId());
+    public NewsItem itemById(NewsItem item) throws IOException {
+        return itemById(item.getNewsId());
     }
 
-    public NewsItem newsItemById(String newsId) throws IOException {
+    public NewsItem itemById(String newsId) throws IOException {
         // Todo check that newsId is a uuid
 
         StringBuilder url = new StringBuilder(this.baseUrl);
