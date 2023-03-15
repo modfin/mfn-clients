@@ -16,7 +16,7 @@ namespace MFNClientExample
         public static void Main(string[] args)
         {
             // Add the base url and entity id of the feed
-            var client = new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+            var client = new Client("https://feed.mfn.se/v1", "2c07a2db-2f22-4a67-ab46-ccb464296638");
             
             // The latest item
             var items = client.Feed().Fetch();

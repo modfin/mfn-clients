@@ -24,8 +24,7 @@ namespace MFNClient
         {
             var url = new StringBuilder();
             url.Append(this._baseUrl);
-            url.Append("/all/a.json");
-            url.Append("?.author.entity_id=").Append(_entityId);
+            url.Append("/feed/").Append(_entityId);
 
             return new Filter(url);
         }
@@ -44,9 +43,8 @@ namespace MFNClient
         {
             StringBuilder url = new StringBuilder();
             url.Append(this._baseUrl);
-            url.Append("/all/a.json").Append("?type=all");
-            url.Append("&.author.entity_id=").Append(_entityId);
-            url.Append("&news_slug=").Append(newsSlug);
+            url.Append("/feed/").Append(_entityId);
+            url.Append("?news-slug=").Append(newsSlug);
             
             var json = await Http.Async(url.ToString());
             var items = models.Feed.FromJson(json).Items;
@@ -77,9 +75,8 @@ namespace MFNClient
         {
             StringBuilder url = new StringBuilder();
             url.Append(this._baseUrl);
-            url.Append("/all/a.json").Append("?type=all");
-            url.Append("&.author.entity_id=").Append(_entityId);
-            url.Append("&news_id=").Append(newsId);
+            url.Append("/feed/").Append(_entityId);
+            url.Append("?news-id=").Append(newsId);
             
             var json = await Http.Async(url.ToString());
             var items = models.Feed.FromJson(json).Items;
@@ -177,7 +174,7 @@ namespace MFNClient
         {
             var b = new StringBuilder();
 
-            b.Append("&limit=").Append(this._limit);
+            b.Append("?limit=").Append(this._limit);
             b.Append("&offset=").Append(this._offset);
             b.Append("&type=").Append(this._type);
 
