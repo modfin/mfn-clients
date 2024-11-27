@@ -1,0 +1,21 @@
+name: php-client-test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+    steps:
+      - uses: actions/checkout@v4
+      - name: test
+        run: |
+          docker run --rm --tty --volume $PWD/php-client:/app composer bash -c 'cd /app; composer update && ./vendor/bin/phpunit tests/MFNClientTest.php'
