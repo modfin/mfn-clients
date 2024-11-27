@@ -93,7 +93,7 @@ var MFNClient = (function () {
 
         this._value = function () {
             var q = "";
-            q += "&limit=" + this._limit;
+            q += "?limit=" + this._limit;
             q += "&offset=" + this._offset;
             q += "&type=" + this._type;
 
@@ -131,16 +131,16 @@ var MFNClient = (function () {
                 TYPE_IR: "ir",
                 TYPE_PR: "pr",
                 item: function (newsSlug, callback) {
-                    var url = baseUrl + "/all/a.json?type=all&.author.entity_id=" + entityId + "&news_slug=" + newsSlug;
+                    var url = baseUrl + "/feed/" + entityId + "?news-slug=" + newsSlug;
                     return get(url, false, callback)
 
                 },
                 itemById: function (newsId, callback) {
-                    var url = baseUrl + "/all/a.json?type=all&.author.entity_id=" + entityId + "&news_id=" + newsId;
+                    var url = baseUrl + "/feed/" + entityId + "?news-id=" + newsId;
                     return get(url, false, callback)
                 },
                 feed: function () {
-                    return new Filter(baseUrl + "/all/a.json?.author.entity_id=" + entityId)
+                    return new Filter(baseUrl + "/feed/" + entityId)
                 }
             }
         }
