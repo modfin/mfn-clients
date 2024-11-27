@@ -33,7 +33,7 @@ class Client
      */
     public function feed()
     {
-        return new Filter($this->baseUrl . "/all/a.json?.author.entity_id=" . $this->entityId);
+        return new Filter($this->baseUrl . "/feed/" . $this->entityId);
     }
 
     /**
@@ -42,7 +42,7 @@ class Client
      */
     public function item($newsSlug)
     {
-        $url = $this->baseUrl . "/all/a.json?type=all&.author.entity_id=" . $this->entityId . "&news_slug=" . $newsSlug;
+        $url = $this->baseUrl . "/feed/" . $this->entityId . "?news-slug=" . $newsSlug;
         return get($url, 0);
     }
 
@@ -52,7 +52,7 @@ class Client
      */
     public function itemById($newsId)
     {
-        $url = $this->baseUrl . "/all/a.json?type=all&.author.entity_id=" . $this->entityId . "&news_id=" . $newsId;
+        $url = $this->baseUrl . "/feed/" . $this->entityId . "?news-id=" . $newsId;
         return get($url, 0);
     }
 
@@ -158,7 +158,7 @@ class Filter
 
     private function value()
     {
-        $q = "&limit=" . $this->limit;
+        $q = "?limit=" . $this->limit;
         $q .= "&offset=" . $this->offset;
         $q .= "&type=" . $this->type;
 

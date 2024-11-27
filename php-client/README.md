@@ -12,8 +12,8 @@ composer test
 include 'src/mfn-client->php';
 use MFN\Client;
 
-// Add the base url and entity id of the feed
-$client = new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+// Initialize the client with the base url and feed id
+$client = new Client("https://feed.mfn.se/v1", "2c07a2db-2f22-4a67-ab46-ccb464296638");
 
 // The latest item
 $items = $client->feed()->fetch();

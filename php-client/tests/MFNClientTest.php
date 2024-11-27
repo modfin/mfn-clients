@@ -8,14 +8,20 @@ class MFNClientTest extends TestCase
 {
 
     public function createClient(){
-        return new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+        return new Client("https://feed.mfn.se/v1", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+    }
+    public function createClientIntrum(){
+        return new Client("https://feed.mfn.se/v1", "d7d583cc-c99d-4152-baa9-bbd89061d9e6");
+    }
+    public function createClientThunderfulGroup(){
+        return new Client("https://feed.mfn.se/v1", "94334e99-00f2-4c98-b5a5-314a8c73fbfe");
     }
 
     public function testFeedItems()
     {
         $c = $this->createClient();
         $items = $c->feed()->fetch();
-        $this->assertTrue(sizeof($items) > 10);
+        $this->assertTrue(sizeof($items) == 25);
     }
 
 
@@ -23,7 +29,7 @@ class MFNClientTest extends TestCase
 
         $c = $this->createClient();
         $items = $c->feed()->type(TYPE_IR)->fetch();
-        $this->assertTrue(sizeof($items) > 0);
+        $this->assertTrue(sizeof($items) == 25);
 
         foreach ($items as $item){
             $this->assertEquals($item->properties->type, TYPE_IR);
@@ -91,29 +97,27 @@ class MFNClientTest extends TestCase
 
         $c = $this->createClient();
         $items0 = $c->feed()->type(TYPE_PR)->year(2019)->fetch();
-        $this->assertEquals(sizeof($items0) , 10);
+        $this->assertEquals(sizeof($items0) , 8);
         foreach ($items0 as $item){
             $this->assertEquals($item->properties->type, TYPE_PR);
         }
-    }
-    public function testYear2(){
 
         $c = $this->createClient();
-        $items0 = $c->feed()->type(TYPE_PR)->year(2018)->fetch();
-        $this->assertEquals(sizeof($items0) , 0);
+        $items0 = $c->feed()->type(TYPE_PR)->year(2020)->fetch();
+        $this->assertEquals(sizeof($items0) , 2);
     }
 
     public function testLang(){
 
         $c = $this->createClient();
-        $items0 = $c->feed()->type(TYPE_IR)->year(2019)->lang("sv")->fetch();
-        $this->assertEquals(sizeof($items0) , 5);
+        $items0 = $c->feed()->type(TYPE_IR)->year(2020)->lang("sv")->fetch();
+        $this->assertEquals(sizeof($items0) , 1);
         foreach ($items0 as $item){
             $this->assertEquals($item->properties->lang, "sv");
         }
 
         $items0 = $c->feed()->year(2019)->lang("en")->fetch();
-        $this->assertEquals(sizeof($items0) , 10);
+        $this->assertEquals(sizeof($items0) , 4);
         foreach ($items0 as $item){
             $this->assertEquals($item->properties->lang, "en");
         }
@@ -121,27 +125,26 @@ class MFNClientTest extends TestCase
 
     public function testTag(){
 
-        $c = $this->createClient();
-        $items0 = $c->feed()->year(2019)->hasTag("sub:ci")->fetch();
-        $this->assertEquals(sizeof($items0) , 7);
+        $c = $this->createClientIntrum();
+        $items0 = $c->feed()->year(2023)->hasTag("sub:report")->fetch();
+        $this->assertEquals(sizeof($items0) , 10);
         foreach ($items0 as $item){
-            $this->assertTrue(in_array("sub:ci", $item->properties->tags));
-        }
-
-        $items0 = $c->feed()->year(2019)->hasTag("sub:ca")->hasTag(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e")->fetch();
-        $this->assertEquals(sizeof($items0) , 1);
-        foreach ($items0 as $item){
-            $this->assertTrue(in_array("sub:ca", $item->properties->tags));
-            $this->assertTrue(in_array(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e", $item->properties->tags));
+            $this->assertTrue(in_array(":regulatory", $item->properties->tags));
         }
     }
 
-    public function testQuery(){
+    public function testCorrection() {
+        $c = $this->createClientThunderfulGroup();
+        $item = $c->itemById("c50e4c61-c49f-440b-815b-daaca5336822");
+        $this->assertTrue(in_array(":correction", $item->properties->tags));
+        $this->assertTrue(in_array(":correction:9ee6a296-0db6-4137-a7c7-14c9a5579953", $item->properties->tags));
+    }
 
-        $c = $this->createClient();
-        $items0 = $c->feed()->year(2019)->query("correction Lorem ipsum")->fetch();
+    public function testQuery(){
+        $c = $this->createClientThunderfulGroup();
+        $items0 = $c->feed()->year(2023)->query("genomför")->fetch();
         $this->assertEquals(sizeof($items0) , 1);
-        $this->assertEquals($items0[0]->content->title , "Correction: Test release (2) from MFN");
+        $this->assertEquals($items0[0]->content->title , "Thunderful Group har genomfört två mindre tilläggsförvärv");
     }
 
 
@@ -150,7 +153,7 @@ class MFNClientTest extends TestCase
         $c = $this->createClient();
         $item = $c->itemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
         $this->assertEquals("b660f6cc-5d7e-4cab-8862-3271b649a636", $item->group_id);
-        $this->assertEquals("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", $item->url);
+        $this->assertEquals("https://feed.mfn.se/v1/feed/2c07a2db-2f22-4a67-ab46-ccb464296638/item/a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3.html", $item->url);
         $this->assertEquals("2c07a2db-2f22-4a67-ab46-ccb464296638", $item->author->entity_id);
         $this->assertEquals(1, sizeof($item->subjects));
         $this->assertEquals("2c07a2db-2f22-4a67-ab46-ccb464296638", $item->subjects[0]->entity_id);
@@ -185,51 +188,11 @@ class MFNClientTest extends TestCase
             "<div class=\"mfn-footer mfn-attachment mfn-attachment-pdf\"><p><strong class=\"mfn-heading-1\">Attachments</strong></p><hr/><p><a class=\"mfn-generated mfn-primary\" href=\"https://storage.mfn.se/22eaf750-a26f-40a0-843a-e3520d356c90/modular-finance-launches-a-new-irm-in-monitor.pdf\" target=\"_blank\" rel=\"nofollow noopener\">Modular Finance launches a new IRM in Monitor</a></p></div>",
             $item->content->html);
 
-        $this->assertEquals("After a considerable time of product development, in close co-operation with\n" .
-            "our customers, we now launch a new IRM in Monitor. Investor Relationship\n" .
-            "Management assists listed companies in making their IR-work more effective and\n" .
-            "easier to follow up.\n" .
-            "\n" .
-            "Monitor has since the start provided unique data and functionailty in regards\n" .
-            "to ownership information. The platform assists listed companies in the Nordics\n" .
-            "to dynamicailly and on an ongoing basis identify and track shareholders that\n" .
-            "otherwise are hard to identify. Since the launch in 2016 the platform has been\n" .
-            "broadened and also includes complete functionality for Investor Targeting,\n" .
-            "data for reports, a mobile app with notifications and now, a complete and\n" .
-            "state of the art IRM.\n" .
-            "| I am very proud of the team and its efforts in this development. In my view\n" .
-            "| Monitor is now by far the most complete and potent IR-product in the\n" .
-            "| Nordics, says Petter Hedborg, CEO of Modular Finance.\n" .
-            "\n" .
-            "IRM is short for Investor Relationship Management and can be seen as a CRM for\n" .
-            "listed companies. The new improved module offers new possibilites to search\n" .
-            "for counterparts and investors in a global database but also for planning and\n" .
-            "logging IR-activities in an efficient way.\n" .
-            "\n" .
-            "Contacts\n" .
-            "------------------------------------------------------------------------------\n" .
-            "Petter Hedborg\n" .
-            "CEO and Founder\n" .
-            "Phone: +46 709 - 42 41 13\n" .
-            "Email: petter.hedborg@modularfinance.se\n" .
-            "\n" .
-            "Måns Flodberg\n" .
-            "Deputy CEO and Founder\n" .
-            "Phone: +46 702 - 83 11 99\n" .
-            "Mail: mans.flodberg@modularfinance.se (faw.azzat@modularfinance.se)\n" .
-            "\n" .
-            "About Modular Finance\n" .
-            "------------------------------------------------------------------------------\n" .
-            "Modular Finance is a SaaS company focusing on the financial market in the\n" .
-            "Nordic region. Through our two business areas, Banking & Finance and Listed\n" .
-            "companies, we offer a number of niche products with a focus on user\n" .
-            "friendliness.\n" .
-            "\n" .
-            "== Attachments ==\n" .
-            "------------------------------------------------------------------------------\n" .
-            "Modular Finance launches a new IRM in Monitor\n" .
-            "(https://storage.mfn.se/22eaf750-a26f-40a0-843a-e3520d356c90/modular-finance--\n" .
-            "launches-a-new-irm-in-monitor.pdf)",
-            $item->content->text);
+    }
+
+    public function testStaging() {
+        $c = new Client("https://feed.mfn.modfin.se/v1", "8f950a38-5364-4628-8c4b-1aa3003626f5");
+        $item = $c->itemById("389fb781-8e4e-5398-81b3-c89ad9815959");
+        $this->assertEquals("93313986-7eed-4c6d-bcab-81cec65b90d3", $item->group_id);
     }
 }
