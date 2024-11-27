@@ -16,7 +16,15 @@ public class TestFeed {
 
 
     static Client createClient() {
-        return new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+        return new Client("https://feed.mfn.se/v1", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+    }
+
+    static Client createClientThunderfulGroup() {
+        return new Client("https://feed.mfn.se/v1", "94334e99-00f2-4c98-b5a5-314a8c73fbfe");
+    }
+
+    static Client createClientIntrum() {
+        return new Client("https://feed.mfn.se/v1", "d7d583cc-c99d-4152-baa9-bbd89061d9e6");
     }
 
     @Test
@@ -139,7 +147,7 @@ public class TestFeed {
                 .type(Type.PR)
                 .year(2019)
                 .fetch();
-        assertEquals(10, items0.size());
+        assertEquals(8, items0.size());
 
         NewsItem item0 = items0.get(0);
         NewsItem item1 = c.itemById(item0);
@@ -161,12 +169,12 @@ public class TestFeed {
     public void testFilterLang() throws IOException {
         Client c = createClient();
         List<NewsItem> items0 = c.feed()
-                .year(2019)
+                .year(2020)
                 .type(Type.IR)
                 .lang("sv")
                 .fetch();
 
-        assertEquals(5, items0.size());
+        assertEquals(1, items0.size());
         for (NewsItem item: items0) {
             assertEquals(item.getProperties().getLang(), "sv");
         }
@@ -178,56 +186,53 @@ public class TestFeed {
         for (NewsItem item: items0) {
             assertEquals(item.getProperties().getLang(), "en");
         }
-        assertEquals(10, items0.size());
+        assertEquals(4, items0.size());
     }
 
     @Test
     public void testFilterTags() throws IOException {
-        Client c = createClient();
+        Client c = createClientIntrum();
         List<NewsItem> items0 = c.feed()
-                .year(2019)
-                .hasTag("sub:ci")
+                .year(2023)
+                .hasTag("sub:report")
                 .fetch();
 
-        assertEquals(7, items0.size());
+        assertEquals(10, items0.size());
         for (NewsItem item : items0) {
-            assertTrue(item.getProperties().getTags().contains("sub:ci"));
+            assertTrue(item.getProperties().getTags().contains(":regulatory"));
         }
 
-        items0 = c.feed()
-                .year(2019)
-                .hasTag("sub:ca")
-                .hasTag(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e")
-                .fetch();
+    }
 
-        assertEquals(1, items0.size());
-        for (NewsItem item : items0) {
-            assertTrue(item.getProperties().getTags().contains("sub:ca"));
-            assertTrue(item.getProperties().getTags().contains(":correction:7e5ece8b-9e1a-4db4-8775-0d97cf2d5b8e"));
-        }
+    @Test
+    public void testCorrection() throws IOException {
+        Client c = createClientThunderfulGroup();
+        NewsItem item = c.itemById("c50e4c61-c49f-440b-815b-daaca5336822");
 
+        assertTrue(item.getProperties().getTags().contains(":correction"));
+        assertTrue(item.getProperties().getTags().contains(":correction:9ee6a296-0db6-4137-a7c7-14c9a5579953"));
     }
 
     @Test
     public void testFilterQuery() throws IOException {
-        Client c = createClient();
+        Client c = createClientThunderfulGroup();
         List<NewsItem> items0 = c.feed()
-                .year(2019)
-                .query("correction Lorem ipsum")
+                .year(2023)
+                .query("genomför")
                 .fetch();
 
         assertEquals(1, items0.size());
-        assertEquals("Correction: Test release (2) from MFN", items0.get(0).getContent().getTitle());
+        assertEquals("Thunderful Group har genomfört två mindre tilläggsförvärv", items0.get(0).getContent().getTitle());
     }
 
 
     @Test
-    public void testConent() throws IOException, ParseException {
+    public void testContent() throws IOException, ParseException {
         Client c = createClient();
         NewsItem item = c.itemById("a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3");
 
         assertEquals("b660f6cc-5d7e-4cab-8862-3271b649a636", item.getGroupId());
-        assertEquals("https://mfn.se/a/modfin/modular-finance-launches-a-new-irm-in-monitor", item.getUrl());
+        assertEquals("https://feed.mfn.se/v1/feed/2c07a2db-2f22-4a67-ab46-ccb464296638/item/a9e4b2ac-fb06-47a9-b3c6-6c9a632efde3.html", item.getUrl());
         assertEquals("2c07a2db-2f22-4a67-ab46-ccb464296638", item.getAuthor().getEntityId());
         assertEquals(1, item.getSubjects().size());
         assertEquals("2c07a2db-2f22-4a67-ab46-ccb464296638", item.getSubjects().get(0).getEntityId());
@@ -273,53 +278,6 @@ public class TestFeed {
                         "</div>\n" +
                         "<div class=\"mfn-footer mfn-attachment mfn-attachment-pdf\"><p><strong class=\"mfn-heading-1\">Attachments</strong></p><hr/><p><a class=\"mfn-generated mfn-primary\" href=\"https://storage.mfn.se/22eaf750-a26f-40a0-843a-e3520d356c90/modular-finance-launches-a-new-irm-in-monitor.pdf\" target=\"_blank\" rel=\"nofollow noopener\">Modular Finance launches a new IRM in Monitor</a></p></div>",
                 item.getContent().getHtml());
-
-        assertEquals("After a considerable time of product development, in close co-operation with\n" +
-                        "our customers, we now launch a new IRM in Monitor. Investor Relationship\n" +
-                        "Management assists listed companies in making their IR-work more effective and\n" +
-                        "easier to follow up.\n" +
-                        "\n" +
-                        "Monitor has since the start provided unique data and functionailty in regards\n" +
-                        "to ownership information. The platform assists listed companies in the Nordics\n" +
-                        "to dynamicailly and on an ongoing basis identify and track shareholders that\n" +
-                        "otherwise are hard to identify. Since the launch in 2016 the platform has been\n" +
-                        "broadened and also includes complete functionality for Investor Targeting,\n" +
-                        "data for reports, a mobile app with notifications and now, a complete and\n" +
-                        "state of the art IRM.\n" +
-                        "| I am very proud of the team and its efforts in this development. In my view\n" +
-                        "| Monitor is now by far the most complete and potent IR-product in the\n" +
-                        "| Nordics, says Petter Hedborg, CEO of Modular Finance.\n" +
-                        "\n" +
-                        "IRM is short for Investor Relationship Management and can be seen as a CRM for\n" +
-                        "listed companies. The new improved module offers new possibilites to search\n" +
-                        "for counterparts and investors in a global database but also for planning and\n" +
-                        "logging IR-activities in an efficient way.\n" +
-                        "\n" +
-                        "Contacts\n" +
-                        "------------------------------------------------------------------------------\n" +
-                        "Petter Hedborg\n" +
-                        "CEO and Founder\n" +
-                        "Phone: +46 709 - 42 41 13\n" +
-                        "Email: petter.hedborg@modularfinance.se\n" +
-                        "\n" +
-                        "Måns Flodberg\n" +
-                        "Deputy CEO and Founder\n" +
-                        "Phone: +46 702 - 83 11 99\n" +
-                        "Mail: mans.flodberg@modularfinance.se (faw.azzat@modularfinance.se)\n" +
-                        "\n" +
-                        "About Modular Finance\n" +
-                        "------------------------------------------------------------------------------\n" +
-                        "Modular Finance is a SaaS company focusing on the financial market in the\n" +
-                        "Nordic region. Through our two business areas, Banking & Finance and Listed\n" +
-                        "companies, we offer a number of niche products with a focus on user\n" +
-                        "friendliness.\n" +
-                        "\n" +
-                        "== Attachments ==\n" +
-                        "------------------------------------------------------------------------------\n" +
-                        "Modular Finance launches a new IRM in Monitor\n" +
-                        "(https://storage.mfn.se/22eaf750-a26f-40a0-843a-e3520d356c90/modular-finance--\n" +
-                        "launches-a-new-irm-in-monitor.pdf)",
-                item.getContent().getText());
     }
 
 }

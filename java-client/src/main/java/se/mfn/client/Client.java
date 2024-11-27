@@ -24,8 +24,8 @@ public class Client {
 
     public Filter feed() {
         StringBuilder url = new StringBuilder(this.baseUrl);
-        url.append("/all/a.json");
-        url.append("?.author.entity_id=").append(entityId);
+        url.append("/feed/");
+        url.append(entityId);
 
         return new Filter(url.toString());
     }
@@ -36,9 +36,9 @@ public class Client {
         // Todo check that newsId is a uuid
 
         StringBuilder url = new StringBuilder(this.baseUrl);
-        url.append("/all/a.json").append("?type=all");
-        url.append("&.author.entity_id=").append(entityId);
-        url.append("&news_slug=").append(newsSlug);
+        url.append("/feed/");
+        url.append(entityId);
+        url.append("?news-slug=").append(newsSlug);
 
         InputStream is = new URL(url.toString()).openStream();
 
@@ -64,9 +64,9 @@ public class Client {
         // Todo check that newsId is a uuid
 
         StringBuilder url = new StringBuilder(this.baseUrl);
-        url.append("/all/a.json").append("?type=all");
-        url.append("&.author.entity_id=").append(entityId);
-        url.append("&news_id=").append(newsId);
+        url.append("/feed/");
+        url.append(entityId);
+        url.append("?news-id=").append(newsId);
 
         InputStream is = new URL(url.toString()).openStream();
 
@@ -143,7 +143,7 @@ public class Client {
         private String value() throws UnsupportedEncodingException {
             StringBuilder b = new StringBuilder();
 
-            b.append("&limit=").append(this.limit);
+            b.append("?limit=").append(this.limit);
             b.append("&offset=").append(this.offset);
             b.append("&type=").append(this.type.value());
 

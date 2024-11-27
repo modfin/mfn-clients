@@ -22,7 +22,7 @@ public class Example {
     public static void main(String args[]) throws IOException {
 
         // Add the base url and entity id of the feed
-        Client client = new Client("https://mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
+        Client client = new Client("https://feed.mfn.se", "2c07a2db-2f22-4a67-ab46-ccb464296638");
 
         // The latest item
         List<NewsItem> items = client.feed().fetch();
