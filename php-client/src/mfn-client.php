@@ -15,17 +15,17 @@ class Client
 {
 
     private $baseUrl;
-    private $entityId;
+    private $feedId;
 
     /**
      * MFNClient constructor.
      * @param $baseUrl
-     * @param $entityId
+     * @param $feedId
      */
-    public function __construct($baseUrl, $entityId)
+    public function __construct($baseUrl, $feedId)
     {
         $this->baseUrl = $baseUrl;
-        $this->entityId = $entityId;
+        $this->feedId = $feedId;
     }
 
     /**
@@ -33,7 +33,7 @@ class Client
      */
     public function feed()
     {
-        return new Filter($this->baseUrl . "/feed/" . $this->entityId);
+        return new Filter($this->baseUrl . "/feed/" . $this->feedId);
     }
 
     /**
@@ -42,7 +42,7 @@ class Client
      */
     public function item($newsSlug)
     {
-        $url = $this->baseUrl . "/feed/" . $this->entityId . "?news-slug=" . $newsSlug;
+        $url = $this->baseUrl . "/feed/" . $this->feedId . "?news-slug=" . $newsSlug;
         return get($url, 0);
     }
 
@@ -52,7 +52,7 @@ class Client
      */
     public function itemById($newsId)
     {
-        $url = $this->baseUrl . "/feed/" . $this->entityId . "?news-id=" . $newsId;
+        $url = $this->baseUrl . "/feed/" . $this->feedId . "?news-id=" . $newsId;
         return get($url, 0);
     }
 
